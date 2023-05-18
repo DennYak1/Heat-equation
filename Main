@@ -1,0 +1,32 @@
+program heat_conduction 
+ implicit none 
+ integer, parameter :: nx = 100 ! Количество узлов по оси x 
+ real, parameter :: length = 1.0 ! Длина расчетной области 
+ real, parameter :: dx = length / (nx - 1) ! Шаг по оси x 
+ real, parameter :: dt = 0.01 ! Шаг по времени 
+ real, parameter :: alpha = 0.1 ! Теплопроводность 
+ real, dimension(0:nx-1) :: temperature ! Распределение темп
+ real, dimension(0:nx-1) :: temperature_new ! Новое распределение темп
+ integer :: i, j 
+ real :: time 
+ 
+ ! Начальное распределение температуры 
+ temperature = 0.0 
+ temperature_new = 0.0 
+ temperature(0) = 100.0 
+ 
+ ! Расчет по времени 
+ do j = 1, 100 ! Xисло итераций
+ time = j * dt 
+ do i = 1, nx-2 
+ temperature_new(i) = temperature(i) + alpha * dt / (dx**2) * (temperature(i-1) - 2.0*temperature(i) + temperature(i+1)) 
+ end do 
+ temperature = temperature_new 
+ end do 
+ 
+ ! Вывод результатов 
+ do i = 0, nx-1 
+ write(*,*) i*dx, temperature(i) 
+ end do 
+ 
+end program heat_conduction
